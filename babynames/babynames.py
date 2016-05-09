@@ -141,17 +141,14 @@ def extract_names(filename):
     #    ml[x[1]]=[x[2],x[3],x[4],x[5],x[6]]
     years = ['2012','2010','2005','2000','1990']
     for x in reg.findall(text):
-        #print (x,ml[x])
         ml[x[1]]={}
-        for i in range(2,6):
-            #index = i.index(' ')
+        for i in range(2,7):
             if '%' in x[i]:
                 ind1=x[i].index(' (')
                 ind2=x[i].index('%')
                 lib = [int(x[i][:ind1]),float(x[i][ind1+2:ind2].replace(',','.'))]
             else:
                 lib = [int(x[i].strip()),None]
-            #l = (i.strip(')*')).replace(' (',' ')
             ml[x[1]][years[i-2]]= lib
 
 #    for x in mylist:
@@ -198,18 +195,12 @@ def print_names(babynames):
         a = input('введите год из списка '+str(years)+' :   ')
         while True:
             if a in years:
-                #print ('Ok')
                 i = years.index(a)
                 break
             else :
                 print ('неправильный год')
                 a = input('введите год из списка '+str(years)+' :   ')
-        for x in sorted(babynames):
-            #print ('{:30} {:12}'.format(x, babynames[x][i]))
-            #st = [x, babynames[x][years[i]][0]]
-            #print ('{:20} {:6}'.format(st))
-            #if babynames[x][years[i]][1]:
-            #    st.append(babynames[x][years[i]][1])
+        for x in sorted(babynames, key = lambda q: babynames[q][years[i]][0], reverse= True):
             g = ""
             if babynames[x][years[i]][1]:
                 g=babynames[x][years[i]][1]
