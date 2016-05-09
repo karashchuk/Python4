@@ -136,9 +136,24 @@ def extract_names(filename):
     #f = open(filename,'r',encoding = "utf-8")
     text = f.read()
     reg = re.compile(r'''<td width="\d*">\s*(.*?)\s*</td> <td width="\d*">\s*(.*?)\s*</td> <td width="\d*">\s*(.*?)\s*</td> <td width="\d*">\s*(.*?)\s*</td> <td width="\d*">\s*(.*?)\s*</td> <td width="\d*">\s*(.*?)\s*</td> <td width="\d*">\s*(.*?)\s*</td>''', re.DOTALL)
-    mylist = {}
+    ml = {}
+    #for x in reg.findall(text):
+    #    ml[x[1]]=[x[2],x[3],x[4],x[5],x[6]]
+    years = ['2012','2010','2005','2000','1990']
     for x in reg.findall(text):
-        mylist[x[1]]=[x[2],x[3],x[4],x[5],x[6]]
+        #print (x,ml[x])
+        ml[x[1]]={}
+        for i in range(2,6):
+            #index = i.index(' ')
+            if '%' in x[i]:
+                ind1=x[i].index(' (')
+                ind2=x[i].index('%')
+                lib = [int(x[i][:ind1]),float(x[i][ind1+2:ind2].replace(',','.'))]
+            else:
+                lib = [int(x[i].strip()),None]
+            #l = (i.strip(')*')).replace(' (',' ')
+            ml[x[1]][years[i-2]]= lib
+
 #    for x in mylist:
 #        print (x, mylist[x])
     """
@@ -173,7 +188,7 @@ def extract_names(filename):
 
     """
     # +++ваш код+++
-    return mylist
+    return ml
 
 
 def print_names(babynames):
@@ -183,14 +198,22 @@ def print_names(babynames):
         a = input('введите год из списка '+str(years)+' :   ')
         while True:
             if a in years:
-                print ('Ok')
+                #print ('Ok')
                 i = years.index(a)
                 break
             else :
                 print ('неправильный год')
                 a = input('введите год из списка '+str(years)+' :   ')
         for x in sorted(babynames):
-            print ('{:30} {:12}'.format(x, babynames[x][i]))
+            #print ('{:30} {:12}'.format(x, babynames[x][i]))
+            #st = [x, babynames[x][years[i]][0]]
+            #print ('{:20} {:6}'.format(st))
+            #if babynames[x][years[i]][1]:
+            #    st.append(babynames[x][years[i]][1])
+            g = ""
+            if babynames[x][years[i]][1]:
+                g=babynames[x][years[i]][1]
+            print ('{:20} {:6} {:6}{:1}'.format(x, babynames[x][years[i]][0], g,'%'))
         cycle = input ('Еще? (y/n):  ')
     return
 

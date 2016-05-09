@@ -59,11 +59,27 @@ def read_urls(filename):
   
 
 def download_images(img_urls, dest_dir):
+    if os.path.exists(dest_dir):
+        a=1
+    else:
+        os.makedirs(dest_dir)
+    #print(os.listdir())
+    myurls=[]
+    for x in img_urls:
+        urllib.request.urlretrieve('http://apple-cat.ru/images/' + x, dest_dir+'/img'+x[-6:])
+        myurls.append(dest_dir + '/img'+x[-6:])
+    #print (myurls)
+    f=open('index.html','w+')
+    f.writelines(['<html>','<body>'])
+    for x in sorted(myurls):
+        f.write('<img src="'+ x + '">')
+    f.writelines(['</body>','</html>'])
+    return
     """
     Получает уже отсортированный спискок url, скачивает каждое изображение
     в директорию dest_dir. Переименовывает изображения в img0.jpg, img1.jpg и тд.
     Создает файл index.html в заданной директории с тегами img, чтобы 
-    отобразить картинку в сборе. Создает директорию, если это необходимо.
+    отобразить картинку в сборе. Создает importдиректорию, если это необходимо.
     """
     # +++ваш код+++
   
@@ -72,13 +88,14 @@ def main():
     args = sys.argv[1:]
 
     if not args:
-        print('usage: [--todir dir] logfile')
-        sys.exit(1)
+        #print('usage: [--todir dir] logfile')
+        #sys.exit(1)
+        args=['apple-cat.ru_access.log','img']
 
-    todir = ''
-    if args[0] == '--todir':
+    #todir = ''
+    #if args[0] == '--todir':
         todir = args[1]
-        del args[0:2]
+    #    del args[0:2]
 
     img_urls = read_urls(args[0])
 

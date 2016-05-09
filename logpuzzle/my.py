@@ -1,5 +1,7 @@
 import re
 import sys
+import urllib.request
+import os
 filename = 'apple-cat.ru_access.log'
 #f = open('babynames_boys.html','r',encoding = "utf-8")
 try:
@@ -7,18 +9,28 @@ try:
 except FileNotFoundError:
     sys.exit(1)
 text = f.read()
-
-
 reg = re.compile(r'GET /images/(.*?) HTTP/1.1', re.DOTALL)	
-
-#reg = re.compile(r'''<td width="57">\s*(.*?)\s*</td> <td width="177">\s*(.*?)\s*</td> <td width="76">\s*(.*?)\s*</td> <td width="90">\s*(.*?)\s*</td> <td width="90"> \n\t\t\t\t\t(.*?)\n\t\t\t\t</td> <td width="90"> \n\t\t\t\t\t(.*?)\n\t\t\t\t</td> <td width="90"> \n\t\t\t\t\t(.*?)\n\t\t\t\t</td>''', re.DOTALL)						
-#reg = re.compile(r'''<td width="\d*">\s*(.*?)\s*</td> <td width="\d*">\s*(.*?)\s*</td> <td width="\d*">\s*(.*?)\s*</td> <td width="\d*">\s*(.*?)\s*</td> <td width="\d*">\s*(.*?)\s*</td> <td width="\d*">\s*(.*?)\s*</td> <td width="\d*">\s*(.*?)\s*</td>''', re.DOTALL)
-#myr=list(reg.findall(text))
-#print (myr)
 im = []
 for x in reg.findall(text):
-    print (x)
     if x not in im:
-    #else:
         im.append(x)
-print(sorted(im))
+#print(sorted(im))
+#for x in im:
+#    urllib.request.urlretrieve('http://apple-cat.ru/images/'+x,x)
+#print(os.listdir('/'))
+dest_dir = 'img'
+if os.path.exists(dest_dir):
+    a=1
+else:
+    os.makedirs(dest_dir)
+#print(os.listdir())
+myurls=[]
+for x in im:
+    urllib.request.urlretrieve('http://apple-cat.ru/images/'+x,dest_dir+'/img'+x[-6:])
+    myurls.append(dest_dir + '/img'+x[-6:])
+#print (myurls)
+f=open('index.html','w+')
+f.writelines(['<html>','<body>'])
+for x in sorted(myurls):
+    f.write('<img src="'+ x + '">')
+f.writelines(['</body>','</html>'])
