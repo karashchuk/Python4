@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-
+__author__      = "Anatoly Karashchuk"
 import sys
 import re
 
@@ -132,6 +132,7 @@ def extract_names(filename):
     try:
         f = open(filename,'r',encoding = "utf-8")
     except FileNotFoundError:
+        print("Ошибка названия файла")
         sys.exit(1)
     #f = open(filename,'r',encoding = "utf-8")
     text = f.read()
@@ -204,8 +205,9 @@ def print_names(babynames):
             g = ""
             if babynames[x][years[i]][1]:
                 g=babynames[x][years[i]][1]
-            print ('{:20} {:6} {:6}{:1}'.format(x, babynames[x][years[i]][0], g,'%'))
+            print ('{:25} {:6} {:6}{:1}'.format(x, babynames[x][years[i]][0], g,'%'))
         cycle = input ('Еще? (y/n):  ')
+        sys.exit(0)
     return
 
 def main():
@@ -213,11 +215,10 @@ def main():
     # Получим список аргументов командной строки, отбросив [0] элемент, 
     # который содержит имя скрипта
     args = sys.argv[1:]
-    #args = ['babynames_boys.html',1]
     if not args:
-        args = ['babynames_girls.html',1]
-        #print('usage: filename')
-        #sys.exit(1)
+        #args = ['babynames_girls.html',1]
+        print('usage: filename')
+        sys.exit(1)
 
     filename = args[0]
     babynames = extract_names(filename)

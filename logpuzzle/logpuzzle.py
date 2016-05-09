@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-
+__author__      = "Anatoly Karashchuk"
 import os
 import re
 import sys
@@ -43,6 +43,7 @@ def read_urls(filename):
     try:
         f = open(filename,'r',encoding = "utf-8")
     except FileNotFoundError:
+        print("Ошибка названия файла")
         sys.exit(1)
     text = f.read()
     reg = re.compile(r'GET /images/(.*?) HTTP/1.1', re.DOTALL)  
@@ -88,14 +89,14 @@ def main():
     args = sys.argv[1:]
 
     if not args:
-        #print('usage: [--todir dir] logfile')
-        #sys.exit(1)
-        args=['apple-cat.ru_access.log','img']
+        print('usage: [--todir dir] logfile')
+        sys.exit(1)
+        #args=['apple-cat.ru_access.log','img']
 
-    #todir = ''
-    #if args[0] == '--todir':
+    todir = ''
+    if args[0] == '--todir':
         todir = args[1]
-    #    del args[0:2]
+        del args[0:2]
 
     img_urls = read_urls(args[0])
 
